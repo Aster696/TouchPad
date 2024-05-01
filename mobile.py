@@ -1,26 +1,13 @@
-# main.py
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from jnius import autoclass
-import socket
+from kivy.clock import Clock
 
-BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
-BluetoothDevice = autoclass('android.bluetooth.BluetoothDevice')
-BluetoothSocket = autoclass('android.bluetooth.BluetoothSocket')
-UUID = autoclass('java.util.UUID')
-
-# Bluetooth UUID for RFCOMM
-uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-
-# Bluetooth server address (your laptop's Bluetooth MAC address)
-server_address = "XX:XX:XX:XX:XX:XX"  # Replace with your laptop's Bluetooth MAC address
-
-class TouchpadApp(App):
+class BluetoothApp(App):
     def build(self):
         layout = FloatLayout()
-        self.label = Label(text="Drag your finger to move the cursor.")
+        self.label = Label(text="Bluetooth App")
         layout.add_widget(self.label)
 
         self.connect_button = Button(text="Connect to Server")
@@ -30,21 +17,15 @@ class TouchpadApp(App):
         return layout
 
     def connect_to_server(self, instance):
-        try:
-            adapter = BluetoothAdapter.getDefaultAdapter()
-            device = adapter.getRemoteDevice(server_address)
-            socket = device.createRfcommSocketToServiceRecord(uuid)
-            socket.connect()
+        # Your Bluetooth communication code using Kivy's Android API here
+        # Example:
+        # from android import BluetoothAdapter, BluetoothDevice, BluetoothSocket
 
-            # Start sending touchpad input
-            # Here you would capture touch events and convert them to x, y coordinates
-            # and send them to the server using socket.send()
-            # For simplicity, we'll just send a sample message
-            socket.send("10,20")
+        # Simulate connection for demonstration
+        Clock.schedule_once(self.simulate_connection, 1)
 
-            self.label.text = "Connected to server. Start moving the cursor!"
-        except Exception as e:
-            self.label.text = f"Error: {e}"
+    def simulate_connection(self, dt):
+        self.label.text = "Connected to server"
 
 if __name__ == "__main__":
-    TouchpadApp().run()
+    BluetoothApp().run()
